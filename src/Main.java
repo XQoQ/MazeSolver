@@ -6,8 +6,8 @@ import java.io.FileNotFoundException;
 public class Main {
     public static void main(String[] args) {
         String[][] m1 = getMaze("data/m1");
-        int[] startPoint = {0, 0};
-        System.out.println(solveMaze(m1, startPoint));
+        Maze maze = new Maze(m1);
+        maze.solveMaze();
     }
 
     public static String[][] getMaze(String fileName) {
@@ -40,8 +40,9 @@ public class Main {
 
     }
 
-    public static String solveMaze(String[][] maze, int[] startPointCord) {
+    public static String solveMaze(Maze maze, int[] startPointCord) {
         ArrayList<int[]> pathPoints = new ArrayList<int[]>();
+
 
         boolean hasPath;
         boolean hasGone;
@@ -68,58 +69,42 @@ public class Main {
                 int[] pp = {currentRow, currentCol};
                 pathPoints.add(pp);
 
-                try {
-                    if (hasGone && maze[currentRow - 1][currentCol].equals(".") && ((currentRow - 1) != previousPointInMaze[0])) {
+                    if (hasGone && maze.canGoNorth()) {
                         previousPointInMaze[0] = currentRow;
                         previousPointInMaze[1] = currentCol;
                         currentRow -= 1;
                         hasPath = true;
                         hasGone = false;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    currentRow = currentRow;
-                }
-                try {
-                    if (hasGone && maze[currentRow][currentCol + 1].equals(".") && (currentCol + 1) != previousPointInMaze[1]) {
+
+                    if (hasGone && maze.canGoEast()) {
                         previousPointInMaze[0] = currentRow;
                         previousPointInMaze[1] = currentCol;
                         currentCol += 1;
                         hasPath = true;
                         hasGone = false;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    currentRow = currentRow;
-                }
-                try {
-                    if (hasGone && maze[currentRow + 1][currentCol].equals(".") && (currentRow + 1) != previousPointInMaze[0]) {
+
+                    if (hasGone && maze.canGoSouth()) {
                         previousPointInMaze[0] = currentRow;
                         previousPointInMaze[1] = currentCol;
                         currentRow += 1;
                         hasPath = true;
                         hasGone = false;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    currentRow = currentRow;
-                }
-                try {
-                    if (hasGone && maze[currentRow][currentCol - 1].equals(".") && currentCol - 1 != previousPointInMaze[1]) {
+
+                    if (hasGone && maze.canGoWest()) {
                         previousPointInMaze[0] = currentRow;
                         previousPointInMaze[1] = currentCol;
                         currentCol -= 1;
                         hasPath = true;
                         hasGone = false;
                     }
-                } catch (IndexOutOfBoundsException e) {
-                    currentRow = currentRow;
-                }
 
-                currentPointInMaze[0] = currentRow;
-                currentPointInMaze[1] = currentCol;
+
             }
 
-            if (!(pathPoints.get(pathPoints.size() - 1)[0] == maze.length - 1) && !(pathPoints.get(pathPoints.size() - 1)[1] == maze[maze.length - 1].length - 1)) {
-                maze[currentRow][currentCol] = "#";
-            } else {
+            if (maze.isMazeSolved()) {
                 isEndReached = true;
             }
 
