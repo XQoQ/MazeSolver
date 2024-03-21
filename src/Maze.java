@@ -65,7 +65,7 @@ public class Maze {
     }
 
     public boolean isMazeSolved() {
-        return (pathPoints.get(pathPoints.size() - 1)[0] == maze.length - 1) && !(pathPoints.get(pathPoints.size() - 1)[1] == maze[maze.length - 1].length - 1);
+        return (pathPoints.get(pathPoints.size() - 1)[0] == maze.length - 1) && (pathPoints.get(pathPoints.size() - 1)[1] == maze[maze.length - 1].length - 1);
     }
 
     public void printSolution() {
@@ -91,6 +91,8 @@ public class Maze {
 
             while (hasPath) {
                 hasPath = false;
+                int[] pp = {currentRow, currentCol};
+                pathPoints.add(pp);
 
                 if (canGoNorth()) {
                     previousPoint[0] = currentRow;
